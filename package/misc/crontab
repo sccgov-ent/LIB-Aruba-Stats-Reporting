@@ -1,0 +1,11 @@
+ 0 * * * * /.../run.sh
+ # 10 * * * * /.../run.sh
+ # 20 * * * * /.../run.sh
+ 30 * * * * /.../run.sh
+ # 40 * * * * /.../run.sh
+ # 50 * * * * /.../run.sh
+ 5 10 * * * /.../errorcheck.sh
+ 5 14 * * * /.../errorcheck.sh
+ 0 23 * * * /.../email.sh
+ 1 0 1 * * /.../report.sh
+ 0 1 1 * * /.../movereports.sh
