@@ -13,7 +13,7 @@ DB_NAME = os.getenv("DB_NAME")
 conn = mariadb.connect(host=DB_IP, user=DB_LOGIN, password=DB_PASSWORD, database=DB_NAME)
 cursor = conn.cursor()
 # headers = ["date", "group name", "count"]
-query = "select date, group_name, SUM(session_count) from `Daily_stats` where Month(date) = MONTH(ADD_Months(CURRENT_DATE, -1)) and Year(date) = YEAR(ADD_MONTHS(date, -1)) group by date, group_name order by date;"
+query = "select date, group_name, SUM(session_count) from `Daily_stats` where Month(date) = MONTH(ADD_Months(CURRENT_DATE, -1)) and Year(date) = YEAR(ADD_MONTHS(CURRENT_DATE, -1)) group by date, group_name order by date;"
 cursor.execute(query)
 results = cursor.fetchall()
 compiled = [[0 for a in range(14)] for b in range(31)]
@@ -67,7 +67,7 @@ with open("/home/reports/" + DB_NAME + " Report " + calendar.month_name[((dateti
     writer.writerows(compiled)
 print(compiled)
 
-query = "select avg(visits) as visits, group_name, dayname(date) from (select count(macaddr) as visits, group_name, date from Daily_stats where Month(date) = MONTH(ADD_Months(CURRENT_DATE, -1)) and Year(date) = YEAR(ADD_MONTHS(date, -1)) group by group_name, date) as stats group by group_name, dayname(date);"
+query = "select avg(visits) as visits, group_name, dayname(date) from (select count(macaddr) as visits, group_name, date from Daily_stats where Month(date) = MONTH(ADD_Months(CURRENT_DATE, -1)) and Year(date) = YEAR(ADD_MONTHS(CURRENT_DATE, -1)) group by group_name, date) as stats group by group_name, dayname(date);"
 cursor.execute(query)
 results = cursor.fetchall()
 with open("/home/reports/" + DB_NAME + " Average Daily Visits Report " + calendar.month_name[((datetime.now().month - 2) % 12) + 1] + ".csv", "w") as file:
@@ -75,7 +75,7 @@ with open("/home/reports/" + DB_NAME + " Average Daily Visits Report " + calenda
     writer.writerows(results)
 print(results)
 
-query = "select max(visits) as visits, group_name, date from (select connection_count as visits, group_name, Hour(time) as date from Connection_Counts where Month(time) = MONTH(ADD_Months(CURRENT_DATE, -1)) and Year(time) = YEAR(ADD_MONTHS(time, -1)) group by group_name, hour(time)) as stats group by group_name, date;"
+query = "select max(visits) as visits, group_name, date from (select connection_count as visits, group_name, Hour(time) as date from Connection_Counts where Month(time) = MONTH(ADD_Months(CURRENT_DATE, -1)) and Year(time) = YEAR(ADD_MONTHS(CURRENT_DATE, -1)) group by group_name, hour(time)) as stats group by group_name, date;"
 cursor.execute(query)
 results = cursor.fetchall()
 with open("/home/reports/" + DB_NAME + " Average Peak Hourly Report " + calendar.month_name[((datetime.now().month - 2) % 12) + 1] + ".csv", "w") as file:
@@ -83,7 +83,7 @@ with open("/home/reports/" + DB_NAME + " Average Peak Hourly Report " + calendar
     writer.writerows(results)
 print(results)
 
-query = "select sum(session_count), group_name as monthly_sessions from Daily_stats where Month(date) = MONTH(ADD_Months(CURRENT_DATE, -1)) and Year(date) = YEAR(ADD_MONTHS(date, -1)) group by group_name;"
+query = "select sum(session_count), group_name as monthly_sessions from Daily_stats where Month(date) = MONTH(ADD_Months(CURRENT_DATE, -1)) and Year(date) = YEAR(ADD_MONTHS(CURRENT_DATE, -1)) group by group_name;"
 cursor.execute(query)
 results = cursor.fetchall()
 with open("/home/reports/" + DB_NAME + " Monthly Sessions Report " + calendar.month_name[((datetime.now().month - 2) % 12) + 1] + ".csv", "w") as file:
@@ -91,7 +91,7 @@ with open("/home/reports/" + DB_NAME + " Monthly Sessions Report " + calendar.mo
     writer.writerows(results)
 print(results)
 
-query = "select count(*) as Total_Visits, group_name from Daily_stats where Month(date) = MONTH(ADD_Months(CURRENT_DATE, -1)) and Year(date) = YEAR(ADD_MONTHS(date, -1)) group by group_name;"
+query = "select count(*) as Total_Visits, group_name from Daily_stats where Month(date) = MONTH(ADD_Months(CURRENT_DATE, -1)) and Year(date) = YEAR(ADD_MONTHS(CURRENT_DATE, -1)) group by group_name;"
 cursor.execute(query)
 results = cursor.fetchall()
 with open("/home/reports/" + DB_NAME + " Total Visits Report " + calendar.month_name[((datetime.now().month - 2) % 12) + 1] + ".csv", "w") as file:
@@ -99,7 +99,7 @@ with open("/home/reports/" + DB_NAME + " Total Visits Report " + calendar.month_
     writer.writerows(results)
 print(results)
 
-query = "select group_name, count(*) as unique_visits from (select distinct macaddr, group_name from Daily_stats where Month(date) = MONTH(ADD_Months(CURRENT_DATE, -1)) and Year(date) = YEAR(ADD_MONTHS(date, -1))) as stats group by group_name;"
+query = "select group_name, count(*) as unique_visits from (select distinct macaddr, group_name from Daily_stats where Month(date) = MONTH(ADD_Months(CURRENT_DATE, -1)) and Year(date) = YEAR(ADD_MONTHS(CURRENT_DATE, -1))) as stats group by group_name;"
 cursor.execute(query)
 results = cursor.fetchall()
 with open("/home/reports/" + DB_NAME + " Unique Visitors Report " + calendar.month_name[((datetime.now().month - 2) % 12) + 1] + ".csv", "w") as file:
@@ -107,7 +107,7 @@ with open("/home/reports/" + DB_NAME + " Unique Visitors Report " + calendar.mon
     writer.writerows(results)
 print(results)
 
-query = "select group_name, Total_Visits / unique_visits from (select group_name, count(*) as Total_Visits from Daily_stats where month(date) = month(CURRENT_DATE) and Year(date) = YEAR(ADD_MONTHS(date, -1)) group by group_name) as A natural join (select group_name, count(*) as unique_visits from (select distinct macaddr, group_name from Daily_stats where month(date) = month(CURRENT_DATE) and Year(date) = YEAR(ADD_MONTHS(date, -1))) as C group by group_name) as B;"
+query = "select group_name, Total_Visits / unique_visits from (select group_name, count(*) as Total_Visits from Daily_stats where month(date) = month(CURRENT_DATE) and Year(date) = YEAR(ADD_MONTHS(CURRENT_DATE, -1)) group by group_name) as A natural join (select group_name, count(*) as unique_visits from (select distinct macaddr, group_name from Daily_stats where month(date) = month(CURRENT_DATE) and Year(date) = YEAR(ADD_MONTHS(CURRENT_DATE, -1))) as C group by group_name) as B;"
 cursor.execute(query)
 results = cursor.fetchall()
 with open("/home/reports/" + DB_NAME + " Average Return Rate Report " + calendar.month_name[((datetime.now().month - 2) % 12) + 1] + ".csv", "w") as file:
@@ -115,7 +115,7 @@ with open("/home/reports/" + DB_NAME + " Average Return Rate Report " + calendar
     writer.writerows(results)
 print(results)
 
-query = "select Max(users) from concurrent_users where month(date) = month(CURRENT_DATE) and Year(date) = YEAR(ADD_MONTHS(date, -1))"
+query = "select Max(users) from concurrent_users where month(date) = month(CURRENT_DATE) and Year(date) = YEAR(ADD_MONTHS(CURRENT_DATE, -1))"
 cursor.execute(query)
 results = cursor.fetchall()
 with open("/home/reports/" + DB_NAME + " Max Concurrent Users Report " + calendar.month_name[((datetime.now().month - 2) % 12) + 1] + ".csv", "w") as file:
