@@ -90,7 +90,7 @@ def gather_test_data():
         groups = json.loads(os.getenv("GROUPS"))
         concurrent_total = 0
         for group in groups:
-            obj = api.paginated_api_query("https://apigw-uswest4.central.arubanetworks.com/monitoring/v1/clients/wireless?group=" + group + "&calculate_total=true")
+            obj = api.paginated_api_query("https://us4.api.central.arubanetworks.com/network-monitoring/v1alpha1/clients?site-name=" + group + "&filter=status%20eq%20%27Connected%27%3B")
             total = obj.get("total")
             concurrent_total += total
             print(total)
@@ -109,7 +109,7 @@ def gather_test_data():
             with open(log_path, "a") as log:
                 log.write("Beginning data collection\n")
     try:
-        obj = api.paginated_api_query("https://apigw-uswest4.central.arubanetworks.com/monitoring/v1/clients/wireless?calculate_total=true")
+        obj = api.paginated_api_query("https://us4.api.central.arubanetworks.com/network-monitoring/v1alpha1/clients?filter=status%20eq%20%27Connected%27%3B")
         # print(obj)
         #print(obj["clients"][1])
         # print(obj.get("total"))

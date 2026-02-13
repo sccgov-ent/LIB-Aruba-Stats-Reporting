@@ -20,14 +20,13 @@ class Central:
         if(self.logging_level > 0):
             with open(self.log_path, "a") as log:
                 log.write("Starting paginated API query\n")
-        counter = 0
+        next = 1
         results = []
-        results.insert(0, self.api_query(url + "&limit=" + str(pagination_limit) + "&offset=" + str(counter * pagination_limit)))
+        results.insert(0, self.api_query(url + "&limit=" + str(pagination_limit) + "&next=" + str(next)))
         total = results[0]["count"]
-        counter += 1
-        while(counter * pagination_limit < total):
-            results.insert(counter, self.api_query(url + "&limit=" + str(pagination_limit) + "&offset=" + str(counter * pagination_limit)))
-            counter += 1
+        while(next != None):
+            results.insert(next - 1, self.api_query(url + "&limit=" + str(pagination_limit) + "&next=" + str(next)))
+            next = results[next - 1]["next"]
         query_results = None
         for result in results:
             if query_results == None:
@@ -74,7 +73,7 @@ class Central:
         
     def gather_data(self):
         try:
-            obj = self.api_query("https://apigw-uswest4.central.arubanetworks.com/monitoring/v1/clients/wireless?calculate_total=true")
+            obj = self.api_query("https://us4.api.central.arubanetworks.com/network-monitoring/v1alpha1/clients?filter=status%20eq%20%27Connected%27%3B")
             # print(obj)
             #print(obj["clients"][1])
             print(obj["total"])
@@ -93,7 +92,7 @@ class Central:
         
     def gather_paginated_data(self):
         try:
-            obj = self.paginated_api_query("https://apigw-uswest4.central.arubanetworks.com/monitoring/v1/clients/wireless?calculate_total=true")
+            obj = self.paginated_api_query("https://us4.api.central.arubanetworks.com/network-monitoring/v1alpha1/clients?filter=status%20eq%20%27Connected%27%3B")
             print(obj)
             for val in obj:
                 for client in val["clients"]:
@@ -134,7 +133,7 @@ class Central:
         try:
             CLIENT_ID = os.getenv("CLIENT_ID")
             CLIENT_SECRET = os.getenv("CLIENT_SECRET")
-            response = requests.post(f"https://apigw-uswest4.central.arubanetworks.com/oauth2/token?client_id={CLIENT_ID}&client_secret={CLIENT_SECRET}&grant_type=refresh_token&refresh_token={token["refresh_token"]}", headers={"content-type" : "application/json", "Authorization": f"Bearer {token["access_token"]}"}, json={"client_id": CLIENT_ID, "client_secret": CLIENT_SECRET, "grant_type": "refresh_token", "refresh_token": token["refresh_token"]})
+            response = requests.post(f"https://sso.common.cloud.hpe.com/as/token.oauth2", data={"grant_type": "client_credentials", "client_id": CLIENT_ID, "client_secret": CLIENT_SECRET})
 
             # Set the fields of token then use that to set the ENV, as we aren't actually given a full new token in response, just some new information about the token
             if(self.logging_level > 0):
@@ -144,7 +143,7 @@ class Central:
                     log.write(str(response.content))
                     log.write("\n")
             token["access_token"] = response.json()["access_token"] #NOTE: If this is erroring out, and the request is a 400 error, try restarting your client, your env var is probably cached and you are using the wrong access token to authenticate
-            token["refresh_token"] = response.json()["refresh_token"]
+            token["token_type"] = response.json()["token_type"]
             token["expires_in"] = response.json()["expires_in"]
             token["created_at"] = int(t.time_ns() / 1000000)
             set_key("/home/yam/dev1/.env", "ARUBA_TOKEN", json.dumps(token))
