@@ -9,8 +9,8 @@ from datetime import *
 class Central:
     def __init__(self):
         load_dotenv(override=True)
-        self.log_path = "/home/yam/dev1/WhoFi/logs/" + datetime.now().strftime("%y-%m-%d-%H:%M") + ".log"
-        set_key("/home/yam/dev1/.env", "LOG_PATH", self.log_path)
+        self.log_path = "/var/log/wifi/" + datetime.now().strftime("%y-%m-%d-%H:%M") + ".log"
+        set_key("/home/adm.ian.may/wifi/Rep1/package/.env", "LOG_PATH", self.log_path)
         os.environ["LOG_PATH"] = self.log_path
         self.db = database.Database()
         self.logging_level = int(os.getenv("LOGGING_LEVEL"))
