@@ -58,7 +58,7 @@ class Central:
         else:
             print("valid token")
         try:
-            results = requests.get(url + "&limit=" + str(pagination_limit), headers= {"content-type":"application/json", "Authorization": f"Bearer {token["access_token"]}"}, timeout=30)
+            results = requests.get(url + "&limit=" + str(pagination_limit), headers= {"content-type":"application/json", "Authorization": f"Bearer {token['access_token']}"}, timeout=30)
             print(results)
             obj = results.json()
             if(self.logging_level > 0):
