@@ -51,7 +51,7 @@ class Database:
         query = "delete from TOKEN"
         print("Old token deleted")
         cursor.execute(query)
-        query = "insert into TOKEN values (%s)"
+        query = "insert into TOKEN (TOKEN) values (%s)"
         cursor.execute(query, [token])
         db.commit()
         print("New token inserted")

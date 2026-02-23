@@ -146,7 +146,7 @@ class Central:
             token["token_type"] = response.json()["token_type"]
             token["expires_in"] = response.json()["expires_in"]
             token["created_at"] = int(t.time_ns() / 1000000)
-            set_key("/home/yam/dev1/.env", "ARUBA_TOKEN", json.dumps(token))
+            set_key("/home/adm.ian.may/wifi/Rep1/package/.env", "ARUBA_TOKEN", json.dumps(token))
             os.environ["ARUBA_TOKEN"] = json.dumps(token)
             if(self.logging_level > 0):
                 with open(self.log_path, "a") as log:
