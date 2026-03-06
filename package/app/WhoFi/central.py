@@ -22,10 +22,11 @@ class Central:
                 log.write("Starting paginated API query\n")
         next = 1
         results = []
-        results.insert(0, self.api_query(url + "&limit=" + str(pagination_limit) + "&next=" + str(next)))
+        initial = self.api_query(url + "&next=" + str(next), pagination_limit)
+        results.insert(0, initial)
         total = results[0]["count"]
         while(next != None):
-            results.insert(next - 1, self.api_query(url + "&limit=" + str(pagination_limit) + "&next=" + str(next)))
+            results.insert(next - 1, self.api_query(url + "&next=" + str(next), pagination_limit))
             next = results[next - 1]["next"]
         query_results = None
         for result in results:
