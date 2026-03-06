@@ -23,6 +23,7 @@ class Central:
         next = 1
         results = []
         initial = self.api_query(url + "&next=" + str(next), pagination_limit)
+        log.write(str(initial) + "\n")
         results.insert(0, initial)
         total = results[0]["count"]
         while(next != None):
