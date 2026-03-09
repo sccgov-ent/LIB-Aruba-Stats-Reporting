@@ -6,7 +6,7 @@ import traceback
 import sys
 
 #api = Central()
-with open("/home/yam/dev1/WhoFi/logs/" + datetime.now().strftime("%y-%m-%d-%H:%M") + ".log", "a") as log:
+with open("/var/log/wifi/" + datetime.now().strftime("%y-%m-%d-%H:%M") + ".log", "a") as log:
     sys.stdout = log
     if len(sys.argv) > 1 and sys.argv[1] == "error":
         print("error report")
