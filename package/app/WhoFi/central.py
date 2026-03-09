@@ -75,7 +75,7 @@ class Central:
         
     def gather_data(self):
         try:
-            obj = self.api_query("https://us4.api.central.arubanetworks.com/network-monitoring/v1/clients?filter=status%20eq%20%27Connected%27%3B")
+            obj = self.api_query("https://us4.api.central.arubanetworks.com/network-monitoring/v1/clients")
             # print(obj)
             #print(obj["clients"][1])
             print(obj["total"])
@@ -94,7 +94,7 @@ class Central:
         
     def gather_paginated_data(self):
         try:
-            obj = self.paginated_api_query("https://us4.api.central.arubanetworks.com/network-monitoring/v1/clients?filter=status%20eq%20%27Connected%27%3B")
+            obj = self.paginated_api_query("https://us4.api.central.arubanetworks.com/network-monitoring/v1/clients")
             print(obj)
             for val in obj:
                 for client in val["items"]:
