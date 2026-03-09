@@ -35,7 +35,7 @@ class Session:
             now = datetime.now()
             self.lastseen = now.timestamp()
 
-load_dotenv("/home/{user}/wifi/Rep1/package/.env", override=True)
+load_dotenv("/home/adm.ian.may/wifi/Rep1/package/.env", override=True)
 log_path = os.getenv("LOG_PATH")
 logging_level = int(os.getenv("LOGGING_LEVEL"))
 
@@ -43,7 +43,7 @@ def load_sessions():
     if(logging_level > 0):
             with open(log_path, "a") as log:
                 log.write("Loading stored sessions\n")
-    load_dotenv("/home/{user}/wifi/Rep1/package/.env", override=True)
+    load_dotenv("/home/adm.ian.may/wifi/Rep1/package/.env", override=True)
     result = {}
     if os.getenv("SESSION_LIST") == "":
         print("EMPTY")
@@ -68,7 +68,7 @@ def dump_sessions(list):
     for entry in list:
         if list[entry] != None:
             result[list[entry].macaddr] = list[entry].stringify()
-    set_key("/home/yam/dev1/.env", "SESSION_LIST", json.dumps(result))
+    set_key("/home/adm.ian.may/wifi/Rep{1}/package/.env", "SESSION_LIST", json.dumps(result))
     #print(result)
     if(logging_level > 0):
             with open(log_path, "a") as log:
