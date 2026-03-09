@@ -34,7 +34,7 @@ class Central:
             if query_results == None:
                 query_results = result
             else:
-                query_results["clients"] = query_results["clients"] + result["clients"]
+                query_results["items"] = query_results["items"] + result["items"]
         if(self.logging_level > 0):
             with open(self.log_path, "a") as log:
                 log.write("Completed paginated API query\n")
@@ -75,12 +75,12 @@ class Central:
         
     def gather_data(self):
         try:
-            obj = self.api_query("https://us4.api.central.arubanetworks.com/network-monitoring/v1alpha1/clients?filter=status%20eq%20%27Connected%27%3B")
+            obj = self.api_query("https://us4.api.central.arubanetworks.com/network-monitoring/v1/clients?filter=status%20eq%20%27Connected%27%3B")
             # print(obj)
             #print(obj["clients"][1])
             print(obj["total"])
             #key = set()
-            for client in obj["clients"]:
+            for client in obj["items"]:
                 #for k in client.keys():
                     # this loop is used to gather all attributes an object being returned may have
                     #key.add(k)
@@ -94,10 +94,10 @@ class Central:
         
     def gather_paginated_data(self):
         try:
-            obj = self.paginated_api_query("https://us4.api.central.arubanetworks.com/network-monitoring/v1alpha1/clients?filter=status%20eq%20%27Connected%27%3B")
+            obj = self.paginated_api_query("https://us4.api.central.arubanetworks.com/network-monitoring/v1/clients?filter=status%20eq%20%27Connected%27%3B")
             print(obj)
             for val in obj:
-                for client in val["clients"]:
+                for client in val["items"]:
                     self.db.insert_test_data(client)
                 self.db.commit()
         except Exception as e:

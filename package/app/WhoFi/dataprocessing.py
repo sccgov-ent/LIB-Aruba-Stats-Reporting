@@ -90,7 +90,7 @@ def gather_test_data():
         groups = json.loads(os.getenv("GROUPS"))
         concurrent_total = 0
         for group in groups:
-            obj = api.paginated_api_query("https://us4.api.central.arubanetworks.com/network-monitoring/v1alpha1/clients?site-name=" + group + "&filter=status%20eq%20%27Connected%27%3B")
+            obj = api.paginated_api_query("https://us4.api.central.arubanetworks.com/network-monitoring/v1/clients?site-name=" + group)
             total = obj.get("total")
             concurrent_total += total
             print(total)
@@ -109,7 +109,7 @@ def gather_test_data():
             with open(log_path, "a") as log:
                 log.write("Beginning data collection\n")
     try:
-        obj = api.paginated_api_query("https://us4.api.central.arubanetworks.com/network-monitoring/v1alpha1/clients?filter=status%20eq%20%27Connected%27%3B")
+        obj = api.paginated_api_query("https://us4.api.central.arubanetworks.com/network-monitoring/v1/clients")
         # print(obj)
         #print(obj["clients"][1])
         # print(obj.get("total"))
@@ -122,7 +122,7 @@ def gather_test_data():
         #     print(total)
         #     db.insert_sessions_count(total, group)
         #key = set()
-        for client in obj.get("clients"):
+        for client in obj.get("items"):
             #for k in client.keys():
                 # this loop is used to gather all attributes an object being returned may have
                 #key.add(k)
@@ -131,9 +131,9 @@ def gather_test_data():
             # Begin handling session objects
             mac = client.get("macaddr")
             current = sessionlist.get(mac)
-            if client.get("last_connection_time") != None:
+            if client.get("lastSeenAt") != None:
                 if current == None:
-                    current = Session(mac, client.get("network"), client.get("group_name"), None, datetime.now().timestamp(), datetime.now().timestamp())
+                    current = Session(mac, client.get("wlanName"), client.get("siteName"), None, datetime.now().timestamp(), datetime.now().timestamp())
                     sessionlist[mac] = current
                 else:
                     current.processrecord(client)
