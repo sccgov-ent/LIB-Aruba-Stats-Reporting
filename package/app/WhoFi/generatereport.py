@@ -16,51 +16,54 @@ cursor = conn.cursor()
 query = "select date, group_name, SUM(session_count) from `Daily_stats` where Month(date) = MONTH(ADD_Months(CURRENT_DATE, -1)) and Year(date) = YEAR(ADD_MONTHS(CURRENT_DATE, -1)) group by date, group_name order by date;"
 cursor.execute(query)
 results = cursor.fetchall()
-compiled = [[0 for a in range(14)] for b in range(31)]
+compiled = [[0 for a in range(15)] for b in range(31)]
 for entry in results:
     match entry[1]:
         case "Campbell_Library":
             compiled[entry[0].day-1][0] = entry[2]
-            compiled[entry[0].day-1][13] = entry[0]
+            compiled[entry[0].day-1][14] = entry[0]
         case "Campbell Library":
             compiled[entry[0].day-1][1] = entry[2]
-            compiled[entry[0].day-1][13] = entry[0]
+            compiled[entry[0].day-1][14] = entry[0]
         case "CampbellExpress_Library":
             compiled[entry[0].day-1][2] = entry[2]
-            compiled[entry[0].day-1][13] = entry[0]
+            compiled[entry[0].day-1][14] = entry[0]
         case "Cupertino_Library":
             compiled[entry[0].day-1][3] = entry[2]
-            compiled[entry[0].day-1][13] = entry[0]
+            compiled[entry[0].day-1][14] = entry[0]
         case "default":
             compiled[entry[0].day-1][4] = entry[2]
-            compiled[entry[0].day-1][13] = entry[0]
+            compiled[entry[0].day-1][14] = entry[0]
         case "Gilroy_Library":
             compiled[entry[0].day-1][5] = entry[2]
-            compiled[entry[0].day-1][13] = entry[0]
+            compiled[entry[0].day-1][14] = entry[0]
         case "LosAltos_Library":
             compiled[entry[0].day-1][6] = entry[2]
-            compiled[entry[0].day-1][13] = entry[0]
+            compiled[entry[0].day-1][14] = entry[0]
         case "Milpitas_Library":
             compiled[entry[0].day-1][7] = entry[2]
-            compiled[entry[0].day-1][13] = entry[0]
-        case "MorganHill_Library":
+            compiled[entry[0].day-1][14] = entry[0]
+        case "Milpitas_ExternalOnly":
             compiled[entry[0].day-1][8] = entry[2]
-            compiled[entry[0].day-1][13] = entry[0]
-        case "SantaClaraHQ":
+            compiled[entry[0].day-1][14] = entry[0]
+        case "MorganHill_Library":
             compiled[entry[0].day-1][9] = entry[2]
-            compiled[entry[0].day-1][13] = entry[0]
-        case "Saratoga_Library":
+            compiled[entry[0].day-1][14] = entry[0]
+        case "SantaClaraHQ":
             compiled[entry[0].day-1][10] = entry[2]
-            compiled[entry[0].day-1][13] = entry[0]
-        case "SCCLD-Wireless":
+            compiled[entry[0].day-1][14] = entry[0]
+        case "Saratoga_Library":
             compiled[entry[0].day-1][11] = entry[2]
-            compiled[entry[0].day-1][13] = entry[0]
-        case "Woodland_Library":
+            compiled[entry[0].day-1][14] = entry[0]
+        case "SCCLD-Wireless":
             compiled[entry[0].day-1][12] = entry[2]
-            compiled[entry[0].day-1][13] = entry[0]
+            compiled[entry[0].day-1][14] = entry[0]
+        case "Woodland_Library":
+            compiled[entry[0].day-1][13] = entry[2]
+            compiled[entry[0].day-1][14] = entry[0]
         case _:
             raise KeyError("Unexpected Group Value: " + entry[1])
-labels = ["Campbell_Library", "Campbell Library", "CampbellExpress_Library", "Cupertino_Library", "default", "Gilroy_Library", "LosAltos_Library", "Milpitas_Library", "MorganHill_Library", "SantaClaraHQ", "Saratoga_Library", "SCCLD-Wireless", "Woodland_Library", "date"]
+labels = ["Campbell_Library", "Campbell Library", "CampbellExpress_Library", "Cupertino_Library", "default", "Gilroy_Library", "LosAltos_Library", "Milpitas_Library", "Milpitas_ExternalOnly", "MorganHill_Library", "SantaClaraHQ", "Saratoga_Library", "SCCLD-Wireless", "Woodland_Library", "date"]
 with open("/home/reports/" + DB_NAME + " Report " + calendar.month_name[((datetime.now().month - 2) % 12) + 1] + ".csv", "w") as file:
     writer = csv.writer(file)
     writer.writerow(labels)
